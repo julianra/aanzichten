@@ -199,7 +199,36 @@ function showTotal(){
 
 window.onload=init;
 </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<button onclick="downloadPDF()">Download PDF</button>
+
+<script>
+async function downloadPDF(){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  const naam = localStorage.getItem("naam") || "Onbekend";
+  const klas = localStorage.getItem("klas") || "?";
+  const score1 = localStorage.getItem("finalScore") || 0;
+  const score2 = localStorage.getItem("scoreA") || 0;
+  const score3 = localStorage.getItem("scoreB") || 0;
+  const totaal = Math.round(((Number(score1)+Number(score2)+Number(score3))/3));
+
+  doc.setFont("helvetica","bold");
+  doc.text("Resultaten Aanzichten", 20, 20);
+  doc.setFont("helvetica","normal");
+  doc.text(`Naam: ${naam}`, 20, 40);
+  doc.text(`Klas: ${klas}`, 20, 50);
+  doc.text(`Deel 1: ${score1}%`, 20, 70);
+  doc.text(`Deel 2: ${score2}%`, 20, 80);
+  doc.text(`Deel 3: ${score3}%`, 20, 90);
+  doc.text(`Totaalscore: ${totaal}%`, 20, 110);
+  doc.save(`Resultaten_${naam}.pdf`);
+}
+</script>
+
 </body>
 </html>
+
 
 
