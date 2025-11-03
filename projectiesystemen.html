@@ -58,6 +58,14 @@
 </header>
 
 <main>
+<div style="background:#1f242b;padding:10px;border-radius:8px;margin-bottom:20px;text-align:center;">
+  <script>
+    const naam = localStorage.getItem("naam") || "Onbekend";
+    const klas = localStorage.getItem("klas") || "?";
+    const score = localStorage.getItem("finalScore") || 0;
+    document.write(`<strong>${naam}</strong> – Klas <strong>${klas}</strong> – Score: <strong>${score}%</strong>`);
+  </script>
+</div>
 
 <section class="card">
   <h2>1️⃣ Van 3D naar aanzichten (orthografisch tekenen)</h2>
@@ -147,3 +155,4 @@ function checkAnswer(ans){
 </script>
 </body>
 </html>
+
