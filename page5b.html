@@ -80,25 +80,17 @@
 
 <script>
 const questions = [
-  {type:"mc",q:"Welke lijnen gebruik je om de hoogte van het voorwerp door te trekken naar het zijaanzicht?",opts:["Hulplijnen","Zichtbare lijnen","Maatlijnen"],correct:0},
-  {type:"mc",q:"Wat is de functie van een centrumlijn?",opts:["Aanduiden van symmetrie of hart van gat","Rand van object tonen","Dikte van materiaal tonen"],correct:0},
-  {type:"mc",q:"Wat teken je bij een doorsnede extra?",opts:["Arcering van het materiaal","Alle onzichtbare lijnen","Een dikkere buitenrand"],correct:0},
   {type:"mc",q:"Welke twee afmetingen zie je in het bovenaanzicht?",opts:["Breedte en diepte","Hoogte en breedte","Hoogte en diepte"],correct:0},
-  {type:"mc",q:"Een 'pocket' is ...",opts:["een doorlopend gat","een ondiepe uitholling","een gleuf"],correct:1},
-  {type:"mc",q:"Wat gebruik je om de vorm op ware grootte te tekenen in 2D?",opts:["Orthografische projectie","Perspectieftekening","Vrije schets"],correct:0},
   {type:"mc",q:"Wat geeft een streepjeslijn aan?",opts:["Een zichtbare rand","Een verborgen rand","Een hulpvlak"],correct:1},
   {type:"mc",q:"Bij het Europees systeem staat het bovenaanzicht ...",opts:["boven","onder","links"],correct:1},
   {type:"mc",q:"Wat doe je vóór je begint te tekenen?",opts:["Vooraanzicht kiezen","Diepte meten","Alles arceren"],correct:0},
-  {type:"mc",q:"Wat gebruik je om een schroefgat te tonen?",opts:["Centrumlijn","Dubbele lijn","Dikke lijn"],correct:0},
   {type:"drag",q:"Verbind het symbool met de juiste betekenis.",pairs:[
     {text:"Ø","label":"Diameter"},
     {text:"⌀","label":"Diameter (alternatief)"},
     {text:"R","label":"Straal"}
   ]},
   {type:"mc",q:"Wat toon je bij een linkerzijaanzicht?",opts:["De rechterkant","De linkerkant","De onderkant"],correct:1},
-  {type:"mc",q:"Wanneer gebruik je een kettinglijn (streep-punt)?",opts:["Voor centrumlijnen","Voor zichtbare randen","Voor maatlijnen"],correct:0},
-  {type:"mc",q:"Een 'blind gat' ...",opts:["gaat niet volledig door","is open aan beide kanten","is een sleuf"],correct:0},
-  {type:"mc",q:"In welk aanzicht zie je meestal het minst aantal randen?",opts:["Boven","Voor","Zij"],correct:0}
+  {type:"mc",q:"Wanneer gebruik je een streepjeslijn?",opts:["Voor onzichtbare randen","Voor zichtbare randen","als ik honger heb"],correct:0},
 ];
 
 let score = Number(localStorage.getItem("scoreA")) || 0;
@@ -209,3 +201,4 @@ window.onload=init;
 </script>
 </body>
 </html>
+
