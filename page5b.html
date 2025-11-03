@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Page 5B – Aanzichten oefening deel 2</title>
+<style>
+  body {
+    font-family: "Segoe UI", sans-serif;
+    background: #0e1117;
+    color: #e6edf3;
+    margin: 0;
+    padding: 0;
+  }
+  header, footer {
+    text-align: center;
+    background: #161b22;
+    padding: 20px;
+  }
+  main { max-width: 900px; margin: auto; padding: 30px; }
+  h2 { color: #58a6ff; border-bottom: 1px solid #30363d; }
+  .card {
+    background: rgba(22, 27, 34, 0.95);
+    border-radius: 14px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+  }
+  .option {
+    background: #1f242b;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 5px 0;
+    cursor: pointer;
+  }
+  .option:hover { background: #2a313a; }
+  .feedback { margin-top: 10px; font-weight: bold; }
+  button {
+    background: #58a6ff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  .drag-container { display: flex; gap: 20px; flex-wrap: wrap; }
+  .drag-item, .drop-zone {
+    padding: 10px;
+    border: 1px dashed #58a6ff;
+    border-radius: 6px;
+    min-width: 120px;
+    text-align: center;
+  }
+  .drop-zone { background: #1f242b; }
+  #scoreBar {
+    height: 25px;
+    border-radius: 8px;
+    background: #222;
+    margin-top: 10px;
+    overflow: hidden;
+  }
+  #scoreFill {
+    height: 100%;
+    background: linear-gradient(90deg, #7ee787, #58a6ff);
+    width: 0%;
+    transition: width 0.6s ease;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🧠 Aanzichten oefenen – Deel 2</h1>
+</header>
+
+<main id="quizArea"></main>
+
+<footer>© 2025 STEM Techniek – Deel 2</footer>
+
+<script>
+const questions = [
+  {type:"mc",q:"Welke lijnen gebruik je om de hoogte van het voorwerp door te trekken naar het zijaanzicht?",opts:["Hulplijnen","Zichtbare lijnen","Maatlijnen"],correct:0},
+  {type:"mc",q:"Wat is de functie van een centrumlijn?",opts:["Aanduiden van symmetrie of hart van gat","Rand van object tonen","Dikte van materiaal tonen"],correct:0},
+  {type:"mc",q:"Wat teken je bij een doorsnede extra?",opts:["Arcering van het materiaal","Alle onzichtbare lijnen","Een dikkere buitenrand"],correct:0},
+  {type:"mc",q:"Welke twee afmetingen zie je in het bovenaanzicht?",opts:["Breedte en diepte","Hoogte en breedte","Hoogte en diepte"],correct:0},
+  {type:"mc",q:"Een 'pocket' is ...",opts:["een doorlopend gat","een ondiepe uitholling","een gleuf"],correct:1},
+  {type:"mc",q:"Wat gebruik je om de vorm op ware grootte te tekenen in 2D?",opts:["Orthografische projectie","Perspectieftekening","Vrije schets"],correct:0},
+  {type:"mc",q:"Wat geeft een streepjeslijn aan?",opts:["Een zichtbare rand","Een verborgen rand","Een hulpvlak"],correct:1},
+  {type:"mc",q:"Bij het Europees systeem staat het bovenaanzicht ...",opts:["boven","onder","links"],correct:1},
+  {type:"mc",q:"Wat doe je vóór je begint te tekenen?",opts:["Vooraanzicht kiezen","Diepte meten","Alles arceren"],correct:0},
+  {type:"mc",q:"Wat gebruik je om een schroefgat te tonen?",opts:["Centrumlijn","Dubbele lijn","Dikke lijn"],correct:0},
+  {type:"drag",q:"Verbind het symbool met de juiste betekenis.",pairs:[
+    {text:"Ø","label":"Diameter"},
+    {text:"⌀","label":"Diameter (alternatief)"},
+    {text:"R","label":"Straal"}
+  ]},
+  {type:"mc",q:"Wat toon je bij een linkerzijaanzicht?",opts:["De rechterkant","De linkerkant","De onderkant"],correct:1},
+  {type:"mc",q:"Wanneer gebruik je een kettinglijn (streep-punt)?",opts:["Voor centrumlijnen","Voor zichtbare randen","Voor maatlijnen"],correct:0},
+  {type:"mc",q:"Een 'blind gat' ...",opts:["gaat niet volledig door","is open aan beide kanten","is een sleuf"],correct:0},
+  {type:"mc",q:"In welk aanzicht zie je meestal het minst aantal randen?",opts:["Boven","Voor","Zij"],correct:0}
+];
+
+let score = Number(localStorage.getItem("scoreA")) || 0;
+let tries = {};
+
+function init(){
+  const area=document.getElementById("quizArea");
+  questions.forEach((q,i)=>{
+    const card=document.createElement("div");
+    card.className="card";
+    card.id="q"+i;
+    card.innerHTML=`<h2>Vraag ${i+16}</h2><p>${q.q}</p><div id="opts${i}"></div><div id="fb${i}" class="feedback"></div>`;
+    area.appendChild(card);
+
+    if(q.type==="mc"){
+      q.opts.forEach((opt,idx)=>{
+        const d=document.createElement("div");
+        d.className="option";
+        d.textContent=opt;
+        d.onclick=()=>checkMC(i,idx);
+        document.getElementById("opts"+i).appendChild(d);
+      });
+    } else if(q.type==="drag"){
+      const dragBox=document.createElement("div");
+      dragBox.className="drag-container";
+      q.pairs.forEach((p,j)=>{
+        const di=document.createElement("div");
+        di.className="drag-item";
+        di.textContent=p.text;
+        di.draggable=true;
+        di.ondragstart=(e)=>e.dataTransfer.setData("text",p.text);
+        dragBox.appendChild(di);
+      });
+      const dropBox=document.createElement("div");
+      dropBox.className="drag-container";
+      q.pairs.forEach((p,j)=>{
+        const dz=document.createElement("div");
+        dz.className="drop-zone";
+        dz.textContent=p.label;
+        dz.ondragover=(e)=>e.preventDefault();
+        dz.ondrop=(e)=>checkDrag(i,p.label,e.dataTransfer.getData("text"),dz);
+        dropBox.appendChild(dz);
+      });
+      document.getElementById("opts"+i).appendChild(dragBox);
+      document.getElementById("opts"+i).appendChild(dropBox);
+    }
+  });
+
+  const end=document.createElement("div");
+  end.className="card";
+  end.innerHTML=`<h2>Eindscore</h2>
+  <button onclick="showTotal()">Toon totale score</button>
+  <div id="totalFb" class="feedback"></div>
+  <div id="scoreBar"><div id="scoreFill"></div></div>`;
+  area.appendChild(end);
+}
+
+function getTryKey(q){return "qB"+q;}
+function incTry(q){if(!tries[getTryKey(q)]) tries[getTryKey(q)]=0; tries[getTryKey(q)]++; return tries[getTryKey(q)];}
+function calcPoints(t){return t===1?1:t===2?0.75:t===3?0.5:0.1;}
+
+function checkMC(q,choice){
+  const question=questions[q];
+  const fb=document.getElementById("fb"+q);
+  const t=incTry(q);
+  if(choice===question.correct){
+    const pts=calcPoints(t);
+    score+=pts;
+    fb.textContent=`✅ Juist! (+${Math.round(pts*100)}%)`;
+    fb.style.color="#7ee787";
+    disableOptions(q);
+  }else{
+    fb.textContent="❌ Fout, probeer opnieuw.";
+    fb.style.color="#ff5555";
+  }
+  localStorage.setItem("scoreB",score);
+}
+function disableOptions(q){
+  document.querySelectorAll("#opts"+q+" .option").forEach(o=>o.onclick=null);
+}
+function checkDrag(q,label,text,zone){
+  const fb=document.getElementById("fb"+q);
+  const t=incTry(q);
+  const pair=questions[q].pairs.find(p=>p.text===text);
+  if(pair && pair.label===label){
+    const pts=calcPoints(t);
+    score+=pts;
+    fb.textContent=`✅ Juist verbonden (+${Math.round(pts*100)}%)`;
+    fb.style.color="#7ee787";
+    zone.style.background="#234";
+  }else{
+    fb.textContent="❌ Niet juist verbonden. Probeer opnieuw.";
+    fb.style.color="#ff5555";
+  }
+  localStorage.setItem("scoreB",score);
+}
+
+function showTotal(){
+  const total=score;
+  const max=30;
+  const perc=Math.min(100,Math.round((total/max)*100));
+  const fb=document.getElementById("totalFb");
+  fb.textContent=`Totaalscore: ${total.toFixed(2)} / ${max}  (${perc}%)`;
+  document.getElementById("scoreFill").style.width=perc+"%";
+}
+
+window.onload=init;
+</script>
+</body>
+</html>
