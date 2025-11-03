@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page 4 – 3D naar 2D & Projectiesystemen</title>
+<style>
+  body{
+    font-family:"Segoe UI",sans-serif;
+    background:#0e1117;
+    color:#e6edf3;
+    margin:0;
+  }
+  header,footer{
+    text-align:center;
+    background:#161b22;
+    padding:20px;
+  }
+  main{max-width:900px;margin:auto;padding:30px;}
+  h2{color:#58a6ff;border-bottom:1px solid #30363d;}
+  .card{
+    background:rgba(22,27,34,0.95);
+    border-radius:14px;
+    padding:25px;
+    margin-bottom:25px;
+    box-shadow:0 0 15px rgba(255,255,255,0.05);
+  }
+  img{
+    width:100%;
+    border-radius:10px;
+    background:#222;
+    margin-top:10px;
+  }
+  button{
+    background:#58a6ff;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    border-radius:8px;
+    cursor:pointer;
+    margin-top:15px;
+  }
+  .quiz-option{
+    background:#1f242b;
+    padding:10px;
+    margin:5px 0;
+    border-radius:6px;
+    cursor:pointer;
+  }
+  .quiz-option:hover{background:#2a313a;}
+  .feedback{margin-top:10px;font-weight:bold;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🧭 Van 3D naar 2D & Europees vs. Amerikaans</h1>
+</header>
+
+<main>
+
+<section class="card">
+  <h2>1️⃣ Van 3D naar aanzichten (orthografisch tekenen)</h2>
+  <p>Wanneer je een 3D-voorwerp tekent in 2D, gebruik je drie aanzichten: voor, boven en zij.  
+  Volg dit stappenplan:</p>
+  <ol>
+    <li><strong>Kies het vooraanzicht</strong> – de kant met de meeste vormkenmerken.</li>
+    <li><strong>Teken het vooraanzicht</strong> met potlood en lat in het middelste vak.</li>
+    <li><strong>Projecteer met dunne hulplijnen</strong> de hoogte en breedte naar de andere vakken.</li>
+    <li><strong>Bovenaanzicht:</strong> plaats de diepte onder het vooraanzicht (volgens Europees systeem).</li>
+    <li><strong>Zijaanzicht:</strong> plaats het aanzicht aan de overzijde van waar je naar kijkt (rechts komt links te staan in Europees systeem).</li>
+  </ol>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/9/94/Orthographic_projection_example.svg" 
+       alt="orthografisch voorbeeld">
+</section>
+
+<section class="card">
+  <h2>2️⃣ Europees vs. Amerikaans projectiesysteem</h2>
+  <p>Er bestaan twee internationale afspraken over de plaats van de aanzichten op de tekening:</p>
+
+  <div id="projectionInfo">
+    <img id="projectionImg" 
+         src="https://upload.wikimedia.org/wikipedia/commons/5/5a/First_angle_projection.svg" 
+         alt="Europees systeem">
+    <p id="projectionText">
+      <strong>Europees projectiesysteem (1ste hoek)</strong> – gebruik in België en Nederland.<br>
+      • Bovenaanzicht onder het vooraanzicht.<br>
+      • Rechterzijaanzicht links van het vooraanzicht.<br>
+      <em>Onthoud: in Europa wisselt het van plaats!</em>
+    </p>
+  </div>
+
+  <button onclick="toggleProjection()">Toon Amerikaans systeem</button>
+</section>
+
+<section class="card">
+  <h2>3️⃣ Mini-quiz – Herken het systeem</h2>
+  <p>Kijk naar het schema hieronder en kies welk systeem het is:</p>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/3/39/Third_angle_projection.svg" alt="quiz schema">
+  <div class="quiz-option" onclick="checkAnswer('amerikaans')">Amerikaans projectiesysteem</div>
+  <div class="quiz-option" onclick="checkAnswer('europees')">Europees projectiesysteem</div>
+  <div id="quizFeedback" class="feedback"></div>
+</section>
+
+<section class="card" style="text-align:center">
+  <a href="page5.html"><button>Volgende → Naar de oefeningen</button></a>
+</section>
+
+</main>
+
+<footer>© 2025 STEM Techniek – Aanzichten Module Pagina 4</footer>
+
+<script>
+let isEuropean=true;
+function toggleProjection(){
+  const img=document.getElementById('projectionImg');
+  const txt=document.getElementById('projectionText');
+  const btn=document.querySelector('button');
+  if(isEuropean){
+    img.src="https://upload.wikimedia.org/wikipedia/commons/3/39/Third_angle_projection.svg";
+    txt.innerHTML="<strong>Amerikaans projectiesysteem (3de hoek)</strong> – gebruikt in de VS en Canada.<br>\
+    • Bovenaanzicht staat boven het vooraanzicht.<br>\
+    • Rechterzijaanzicht staat rechts van het vooraanzicht.<br>\
+    <em>Hier blijft alles op de kant waar je naar kijkt.</em>";
+    btn.textContent="Toon Europees systeem";
+  }else{
+    img.src="https://upload.wikimedia.org/wikipedia/commons/5/5a/First_angle_projection.svg";
+    txt.innerHTML="<strong>Europees projectiesysteem (1ste hoek)</strong> – gebruik in België en Nederland.<br>\
+    • Bovenaanzicht onder het vooraanzicht.<br>\
+    • Rechterzijaanzicht links van het vooraanzicht.<br>\
+    <em>In Europa wisselt het van plaats!</em>";
+    btn.textContent="Toon Amerikaans systeem";
+  }
+  isEuropean=!isEuropean;
+}
+
+function checkAnswer(ans){
+  const fb=document.getElementById('quizFeedback');
+  if(ans==='amerikaans'){
+    fb.textContent="✅ Juist! Dit is het Amerikaanse (3de hoek) systeem – bovenaanzicht boven het vooraanzicht.";
+    fb.style.color="#7ee787";
+  }else{
+    fb.textContent="❌ Fout. In het Europese systeem staat het bovenaanzicht onder het vooraanzicht.";
+    fb.style.color="#ff5555";
+  }
+}
+</script>
+</body>
+</html>
