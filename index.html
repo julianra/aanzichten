@@ -221,15 +221,19 @@ function checkLine(i,name,el){
 
 // ---- Einde ----
 function finishLesson(){
-  document.getElementById("page"+current).classList.remove("active");
-  document.getElementById("resultPage").classList.add("active");
-  const naam=localStorage.getItem("naam");
-  const klas=localStorage.getItem("klas");
-  const total=Math.round((score/7)*100);
-  document.getElementById("resultText").innerHTML=
-    `<strong>${naam}</strong> uit klas <strong>${klas}</strong> behaalde een score van <strong>${total}%</strong>.`;
-  localStorage.setItem("finalScore",total);
+  const naam = localStorage.getItem("naam");
+  const klas = localStorage.getItem("klas");
+  const total = Math.round((score / 7) * 100);
+  localStorage.setItem("finalScore", total);
+
+  // Eventueel: toon kort bericht
+  alert(`${naam} (${klas}) behaalde ${total}% – Je gaat nu verder naar de volgende les.`);
+
+  // Automatisch doorsturen naar de volgende pagina
+  window.location.href = "projectiesystemen.html";
 }
+
 </script>
 </body>
 </html>
+
