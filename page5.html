@@ -68,25 +68,18 @@
 <script>
 /* ===== Quizdata ===== */
 const questions = [
-  { type:"mc", q:"Welk aanzicht toont de hoogte van een voorwerp?", opts:["Bovenaanzicht","Vooraanzicht","Zijaanzicht"], correct:1 },
-  { type:"mc", q:"Wat gebruik je om onzichtbare randen te tekenen?", opts:["Doorgetrokken lijn","Streepjeslijn","Gestippelde lijn"], correct:1 },
+  { type:"mc", q:"In welk aanzicht kan je de  hoogte van een voorwerp niet zien?", opts:["Bovenaanzicht","Vooraanzicht","Zijaanzicht"], correct:1 },
+  { type:"mc", q:"Wat gebruik je om onzichtbare randen te tekenen?", opts:["Doorgetrokken lijn","een zwart gat","Gestippelde lijn"], correct:1 },
   { type:"mc", q:"Wat zie je in het bovenaanzicht niet?", opts:["Hoogte","Breedte","Diepte"], correct:0 },
   { type:"mc", q:"Waar plaats je het rechter zijaanzicht in Europees systeem?", opts:["Rechts","Links","Boven"], correct:1 },
   { type:"mc", q:"In welk systeem blijft alles aan de kant waar je naar kijkt?", opts:["Europees","Amerikaans"], correct:1 },
-  { type:"mc", q:"Een holte die niet doorloopt teken je met ...", opts:["doorgetrokken lijnen","streepjeslijnen die stoppen","dikke lijnen"], correct:1 },
-  { type:"mc", q:"Welke lijn is het dunste?", opts:["Hulplijn","Zichtbare rand","Onzichtbare rand"], correct:0 },
-  { type:"mc", q:"Het centrum van een gat geef je aan met ...", opts:["Streep-punt-lijn","Dikke doorgetrokken lijn","Dubbele lijn"], correct:0 },
   { type:"mc", q:"Wat toon je in een zijaanzicht?", opts:["Hoogte en breedte","Hoogte en diepte","Breedte en diepte"], correct:1 },
   { type:"mc", q:"Wat gebeurt er in Europa met het bovenaanzicht?", opts:["Het staat boven","Het staat onder","Het staat links"], correct:1 },
   /* --- drag-and-drop oefening --- */
   { type:"drag", q:"Verbind de lijnsoorten met hun naam.", pairs:[
     {text:"──────",label:"Zichtbare rand"},
-    {"text":"- - - - -","label":"Onzichtbare rand"},
-    {"text":"– · – · –","label":"Centrumlijn"}
+    {"text":"- - - - -","label":"Onzichtbare rand"}
   ]},
-  { type:"mc", q:"Wat gebruik je om maten over te nemen?", opts:["Hulplijnen","Contourlijnen","Centrumlijnen"], correct:0 },
-  { type:"mc", q:"Wat doe je als er te veel onzichtbare lijnen zijn?", opts:["Toch alles tekenen","Een doorsnede maken","Lijnen dikker maken"], correct:1 },
-  { type:"mc", q:"Een gat dat helemaal doorloopt heet een ...", opts:["blind gat","doorlopend gat","pocket"], correct:1 },
   { type:"mc", q:"In welk aanzicht zie je de diepte het best?", opts:["Bovenaanzicht","Vooraanzicht","Zijaanzicht"], correct:0 }
 ];
 
@@ -192,3 +185,4 @@ window.onload=init;
 </script>
 </body>
 </html>
+
