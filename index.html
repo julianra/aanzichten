@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aanzichten – Interactieve Leerles</title>
+<style>
+  body {
+    font-family: "Segoe UI", sans-serif;
+    background:#0e1117;
+    color:#e6edf3;
+    margin:0;
+    padding:0;
+  }
+  header,footer{
+    text-align:center;
+    background:#161b22;
+    padding:20px;
+  }
+  main{max-width:900px;margin:auto;padding:30px;}
+  section{display:none;}
+  section.active{display:block;}
+  button{
+    background:#58a6ff;color:white;border:none;
+    padding:10px 20px;border-radius:8px;cursor:pointer;
+    margin-top:20px;
+  }
+  input {
+    padding:8px;
+    border-radius:6px;
+    border:none;
+    margin:5px;
+  }
+  .card{background:#1f242b;padding:20px;border-radius:10px;margin-bottom:20px;}
+  .line-options{display:flex;gap:15px;flex-wrap:wrap;}
+  .line{width:150px;height:40px;border:1px solid #444;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+  .selected{outline:3px solid #7ee787;}
+  .feedback{margin-top:10px;font-weight:bold;}
+</style>
+</head>
+<body>
+<header>
+  <h1>🧭 Aanzichten en Technisch Tekenen</h1>
+</header>
+
+<main>
+
+<!-- Pagina 0 - naam/klas -->
+<section id="page0" class="active">
+  <div class="card">
+    <h2>Welkom!</h2>
+    <p>Vul eerst je naam en klas in. Dit wordt onthouden voor alle onderdelen.</p>
+    <input id="naam" placeholder="Naam">
+    <input id="klas" placeholder="Klas">
+    <br>
+    <button onclick="saveStudent()">Start les →</button>
+  </div>
+</section>
+
+<!-- Pagina 1 -->
+<section id="page1">
+  <h2>Introductie</h2>
+  <div class="card">
+    <p>Welkom bij de interactieve les <strong>Aanzichten en 3D-inzicht</strong>.  
+       Je leert vandaag stap voor stap:</p>
+    <ul>
+      <li>wat aanzichten zijn en hoe je ze kiest,</li>
+      <li>hoe je lijnen correct tekent,</li>
+      <li>hoe we in Europa projecteren,</li>
+      <li>en hoe je gaten, holtes en onzichtbare lijnen weergeeft.</li>
+    </ul>
+  </div>
+  <button onclick="nextPage()">Volgende →</button>
+</section>
+
+<!-- Pagina 2 -->
+<section id="page2">
+  <h2>Wat zijn aanzichten?</h2>
+
+  <!-- Opdracht Blauw -->
+  <div class="card">
+    <h3>DOE-opdracht: blauw aanzicht</h3>
+    <p>Klik op het aanzicht dat volgens jou het <strong>blauwe aanzicht</strong> is.</p>
+    <div style="display:flex;gap:10px;">
+      <img src="fotos/l vorm.png" width="150">
+      <img src="fotos/boven.png" width="150" onclick="checkAnswer(0,0)">
+      <img src="fotos/voor.png" width="150" onclick="checkAnswer(0,1)">
+      <img src="fotos/zij.png" width="150" onclick="checkAnswer(0,0)">
+    </div>
+    <div id="fb0" class="feedback"></div>
+  </div>
+
+  <!-- Opdracht Rood -->
+  <div class="card">
+    <h3>DOE-opdracht: rood aanzicht</h3>
+    <p>Klik op het aanzicht dat volgens jou het <strong>rode aanzicht</strong> is.</p>
+    <div style="display:flex;gap:10px;">
+      <img src="fotos/l vorm.png" width="150">
+      <img src="fotos/boven.png" width="150" onclick="checkAnswer(1,1)">
+      <img src="fotos/voor.png" width="150" onclick="checkAnswer(1,0)">
+      <img src="fotos/zij.png" width="150" onclick="checkAnswer(1,0)">
+    </div>
+    <div id="fb1" class="feedback"></div>
+  </div>
+
+  <!-- Opdracht Geel -->
+  <div class="card">
+    <h3>DOE-opdracht: geel aanzicht</h3>
+    <p>Klik op het aanzicht dat volgens jou het <strong>gele aanzicht</strong> is.</p>
+    <div style="display:flex;gap:10px;">
+      <img src="fotos/l vorm.png" width="150">
+      <img src="fotos/boven.png" width="150" onclick="checkAnswer(2,0)">
+      <img src="fotos/voor.png" width="150" onclick="checkAnswer(2,0)">
+      <img src="fotos/zij.png" width="150" onclick="checkAnswer(2,1)">
+    </div>
+    <div id="fb2" class="feedback"></div>
+  </div>
+
+  <button onclick="nextPage()">Volgende →</button>
+</section>
+
+<!-- Pagina 3 -->
+<section id="page3">
+  <h2>Lijnsoorten in technische tekeningen</h2>
+
+  <div class="card">
+    <h3>Herken de lijnsoorten</h3>
+    <p>Klik bij elk type de juiste naam.</p>
+    <div id="lineQuiz"></div>
+    <div id="lineFeedback" class="feedback"></div>
+  </div>
+
+  <button onclick="finishLesson()">Les afronden</button>
+</section>
+
+<section id="resultPage">
+  <h2>Resultaat</h2>
+  <div class="card">
+    <p id="resultText"></p>
+  </div>
+</section>
+
+</main>
+
+<footer>© 2025 STEM Techniek – Aanzichtenmodule</footer>
+
+<script>
+let current = 0;
+let score = 0;
+let tries = {};
+
+function nextPage(){
+  document.getElementById("page"+current).classList.remove("active");
+  current++;
+  if(document.getElementById("page"+current))
+    document.getElementById("page"+current).classList.add("active");
+}
+
+function saveStudent(){
+  const naam=document.getElementById("naam").value.trim();
+  const klas=document.getElementById("klas").value.trim();
+  if(!naam || !klas){alert("Vul eerst naam en klas in.");return;}
+  localStorage.setItem("naam",naam);
+  localStorage.setItem("klas",klas);
+  localStorage.setItem("score",0);
+  nextPage();
+}
+
+// ---- DOE-opdrachten ----
+function incTry(key){tries[key]=(tries[key]||0)+1; return tries[key];}
+function pointsForTry(t){return t===1?1:t===2?0.5:t===3?0.1:0;}
+function checkAnswer(id,correct){
+  const fb=document.getElementById("fb"+id);
+  const t=incTry("q"+id);
+  if(correct===1){
+    const pts=pointsForTry(t);
+    const earned=Math.round(pts*100);
+    score+=pts;
+    fb.textContent=`✅ Juist! (+${earned}%)`;
+    fb.style.color="#7ee787";
+  } else {
+    fb.textContent="❌ Fout. Probeer opnieuw.";
+    fb.style.color="#ff5555";
+  }
+  localStorage.setItem("score",score);
+}
+
+// ---- Lijnsoorten ----
+const lines=[
+  {img:"fotos/zichtbaar.jpg", correct:"Zichtbare rand"},
+  {img:"fotos/onzichtbaar.jpg", correct:"Onzichtbare rand"},
+  {img:"fotos/amerikaans.jpg", correct:"Amerikaans"},
+  {img:"fotos/europees.jpg", correct:"Europees"}
+];
+const names=["Zichtbare rand","Onzichtbare rand","Amerikaans","Europees"];
+const container=document.getElementById("lineQuiz");
+lines.forEach((l,i)=>{
+  const div=document.createElement("div");
+  div.className="line-options";
+  div.innerHTML=`<img src="${l.img}" width="150">
+  ${names.map(n=>`<div class='line' onclick='checkLine(${i},"${n}",this)'>${n}</div>`).join("")}`;
+  container.appendChild(div);
+});
+
+function checkLine(i,name,el){
+  const fb=document.getElementById("lineFeedback");
+  const t=incTry("l"+i);
+  [...document.querySelectorAll(".line")].forEach(l=>l.classList.remove("selected"));
+  el.classList.add("selected");
+  if(name===lines[i].correct){
+    const pts=pointsForTry(t);
+    score+=pts;
+    fb.textContent=`✅ Correct (+${Math.round(pts*100)}%)`;
+    fb.style.color="#7ee787";
+  }else{
+    fb.textContent="❌ Fout.";
+    fb.style.color="#ff5555";
+  }
+  localStorage.setItem("score",score);
+}
+
+// ---- Einde ----
+function finishLesson(){
+  document.getElementById("page"+current).classList.remove("active");
+  document.getElementById("resultPage").classList.add("active");
+  const naam=localStorage.getItem("naam");
+  const klas=localStorage.getItem("klas");
+  const total=Math.round((score/7)*100);
+  document.getElementById("resultText").innerHTML=
+    `<strong>${naam}</strong> uit klas <strong>${klas}</strong> behaalde een score van <strong>${total}%</strong>.`;
+  localStorage.setItem("finalScore",total);
+}
+</script>
+</body>
+</html>
