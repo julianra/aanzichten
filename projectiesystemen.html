@@ -78,7 +78,7 @@
     <li><strong>Bovenaanzicht:</strong> plaats de diepte onder het vooraanzicht (volgens Europees systeem).</li>
     <li><strong>Zijaanzicht:</strong> plaats het aanzicht aan de overzijde van waar je naar kijkt (rechts komt links te staan in Europees systeem).</li>
   </ol>
-  <img src="https://upload.wikimedia.org/wikipedia/commons/9/94/Orthographic_projection_example.svg" 
+  <img src="fotos/orthografisch.jpg" 
        alt="orthografisch voorbeeld">
 </section>
 
@@ -88,7 +88,7 @@
 
   <div id="projectionInfo">
     <img id="projectionImg" 
-         src="https://upload.wikimedia.org/wikipedia/commons/5/5a/First_angle_projection.svg" 
+         src="fotos/europees.jpg" 
          alt="Europees systeem">
     <p id="projectionText">
       <strong>Europees projectiesysteem (1ste hoek)</strong> – gebruik in België en Nederland.<br>
@@ -104,7 +104,7 @@
 <section class="card">
   <h2>3️⃣ Mini-quiz – Herken het systeem</h2>
   <p>Kijk naar het schema hieronder en kies welk systeem het is:</p>
-  <img src="https://upload.wikimedia.org/wikipedia/commons/3/39/Third_angle_projection.svg" alt="quiz schema">
+  <img src="fotos/amerikaans" alt="quiz schema">
   <div class="quiz-option" onclick="checkAnswer('amerikaans')">Amerikaans projectiesysteem</div>
   <div class="quiz-option" onclick="checkAnswer('europees')">Europees projectiesysteem</div>
   <div id="quizFeedback" class="feedback"></div>
@@ -125,7 +125,7 @@ function toggleProjection(){
   const txt=document.getElementById('projectionText');
   const btn=document.querySelector('button');
   if(isEuropean){
-    img.src="https://upload.wikimedia.org/wikipedia/commons/3/39/Third_angle_projection.svg";
+    img.src="fotos/amerikaans.jpg";
     txt.innerHTML="<strong>Amerikaans projectiesysteem (3de hoek)</strong> – gebruikt in de VS en Canada.<br>\
     • Bovenaanzicht staat boven het vooraanzicht.<br>\
     • Rechterzijaanzicht staat rechts van het vooraanzicht.<br>\
@@ -155,4 +155,5 @@ function checkAnswer(ans){
 </script>
 </body>
 </html>
+
 
