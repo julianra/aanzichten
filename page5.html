@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Page 5A – Aanzichten oefening deel 1</title>
+<style>
+  body { 
+    font-family: "Segoe UI", sans-serif;
+    background: #0e1117;
+    color: #e6edf3;
+    margin: 0;
+    padding: 0;
+  }
+  header, footer {
+    text-align: center;
+    background: #161b22;
+    padding: 20px;
+  }
+  main { max-width: 900px; margin: auto; padding: 30px; }
+  h2 { color: #58a6ff; border-bottom: 1px solid #30363d; }
+  .card {
+    background: rgba(22, 27, 34, 0.95);
+    border-radius: 14px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+  }
+  .option {
+    background: #1f242b;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 5px 0;
+    cursor: pointer;
+  }
+  .option:hover { background: #2a313a; }
+  .feedback { margin-top: 10px; font-weight: bold; }
+  button {
+    background: #58a6ff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  .drag-container { display: flex; gap: 20px; flex-wrap: wrap; }
+  .drag-item, .drop-zone {
+    padding: 10px;
+    border: 1px dashed #58a6ff;
+    border-radius: 6px;
+    min-width: 120px;
+    text-align: center;
+  }
+  .drop-zone { background: #1f242b; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🧠 Aanzichten oefenen – Deel 1</h1>
+</header>
+
+<main id="quizArea"></main>
+
+<footer>© 2025 STEM Techniek – Deel 1</footer>
+
+<script>
+/* ===== Quizdata ===== */
+const questions = [
+  { type:"mc", q:"Welk aanzicht toont de hoogte van een voorwerp?", opts:["Bovenaanzicht","Vooraanzicht","Zijaanzicht"], correct:1 },
+  { type:"mc", q:"Wat gebruik je om onzichtbare randen te tekenen?", opts:["Doorgetrokken lijn","Streepjeslijn","Gestippelde lijn"], correct:1 },
+  { type:"mc", q:"Wat zie je in het bovenaanzicht niet?", opts:["Hoogte","Breedte","Diepte"], correct:0 },
+  { type:"mc", q:"Waar plaats je het rechter zijaanzicht in Europees systeem?", opts:["Rechts","Links","Boven"], correct:1 },
+  { type:"mc", q:"In welk systeem blijft alles aan de kant waar je naar kijkt?", opts:["Europees","Amerikaans"], correct:1 },
+  { type:"mc", q:"Een holte die niet doorloopt teken je met ...", opts:["doorgetrokken lijnen","streepjeslijnen die stoppen","dikke lijnen"], correct:1 },
+  { type:"mc", q:"Welke lijn is het dunste?", opts:["Hulplijn","Zichtbare rand","Onzichtbare rand"], correct:0 },
+  { type:"mc", q:"Het centrum van een gat geef je aan met ...", opts:["Streep-punt-lijn","Dikke doorgetrokken lijn","Dubbele lijn"], correct:0 },
+  { type:"mc", q:"Wat toon je in een zijaanzicht?", opts:["Hoogte en breedte","Hoogte en diepte","Breedte en diepte"], correct:1 },
+  { type:"mc", q:"Wat gebeurt er in Europa met het bovenaanzicht?", opts:["Het staat boven","Het staat onder","Het staat links"], correct:1 },
+  /* --- drag-and-drop oefening --- */
+  { type:"drag", q:"Verbind de lijnsoorten met hun naam.", pairs:[
+    {text:"──────",label:"Zichtbare rand"},
+    {"text":"- - - - -","label":"Onzichtbare rand"},
+    {"text":"– · – · –","label":"Centrumlijn"}
+  ]},
+  { type:"mc", q:"Wat gebruik je om maten over te nemen?", opts:["Hulplijnen","Contourlijnen","Centrumlijnen"], correct:0 },
+  { type:"mc", q:"Wat doe je als er te veel onzichtbare lijnen zijn?", opts:["Toch alles tekenen","Een doorsnede maken","Lijnen dikker maken"], correct:1 },
+  { type:"mc", q:"Een gat dat helemaal doorloopt heet een ...", opts:["blind gat","doorlopend gat","pocket"], correct:1 },
+  { type:"mc", q:"In welk aanzicht zie je de diepte het best?", opts:["Bovenaanzicht","Vooraanzicht","Zijaanzicht"], correct:0 }
+];
+
+let score = 0;
+let tries = {};
+
+/* ===== Functies ===== */
+function init(){
+  const area=document.getElementById("quizArea");
+  questions.forEach((q,i)=>{
+    const card=document.createElement("div");
+    card.className="card";
+    card.id="q"+i;
+    let html=`<h2>Vraag ${i+1}</h2><p>${q.q}</p><div id="opts${i}"></div><div id="fb${i}" class="feedback"></div>`;
+    card.innerHTML=html;
+    area.appendChild(card);
+
+    if(q.type==="mc"){
+      q.opts.forEach((opt,idx)=>{
+        const d=document.createElement("div");
+        d.className="option";
+        d.textContent=opt;
+        d.onclick=()=>checkMC(i,idx);
+        document.getElementById("opts"+i).appendChild(d);
+      });
+    } else if(q.type==="drag"){
+      const dragBox=document.createElement("div");
+      dragBox.className="drag-container";
+      q.pairs.forEach((p,j)=>{
+        const di=document.createElement("div");
+        di.className="drag-item";
+        di.textContent=p.text;
+        di.draggable=true;
+        di.ondragstart=(e)=>e.dataTransfer.setData("text",p.text);
+        dragBox.appendChild(di);
+      });
+      const dropBox=document.createElement("div");
+      dropBox.className="drag-container";
+      q.pairs.forEach((p,j)=>{
+        const dz=document.createElement("div");
+        dz.className="drop-zone";
+        dz.textContent=p.label;
+        dz.ondragover=(e)=>e.preventDefault();
+        dz.ondrop=(e)=>checkDrag(i,p.label,e.dataTransfer.getData("text"),dz);
+        dropBox.appendChild(dz);
+      });
+      document.getElementById("opts"+i).appendChild(dragBox);
+      document.getElementById("opts"+i).appendChild(dropBox);
+    }
+  });
+
+  const next=document.createElement("a");
+  next.href="page5b.html";
+  next.innerHTML='<button>→ Naar deel 2</button>';
+  area.appendChild(next);
+}
+
+function getTryKey(q){return "q"+q;}
+function incTry(q){
+  if(!tries[getTryKey(q)]) tries[getTryKey(q)]=0;
+  tries[getTryKey(q)]++;
+  return tries[getTryKey(q)];
+}
+function calcPoints(t){return t===1?1:t===2?0.75:t===3?0.5:0.1;}
+
+function checkMC(q,choice){
+  const question=questions[q];
+  const fb=document.getElementById("fb"+q);
+  const t=incTry(q);
+  if(choice===question.correct){
+    const pts=calcPoints(t);
+    score+=pts;
+    fb.textContent=`✅ Juist! (+${Math.round(pts*100)}%)`;
+    fb.style.color="#7ee787";
+    disableOptions(q);
+  }else{
+    fb.textContent="❌ Fout, probeer opnieuw.";
+    fb.style.color="#ff5555";
+  }
+  localStorage.setItem("scoreA",score);
+}
+function disableOptions(q){
+  document.querySelectorAll("#opts"+q+" .option").forEach(o=>o.onclick=null);
+}
+function checkDrag(q,label,text,zone){
+  const fb=document.getElementById("fb"+q);
+  const t=incTry(q);
+  const pair=questions[q].pairs.find(p=>p.text===text);
+  if(pair && pair.label===label){
+    const pts=calcPoints(t);
+    score+=pts;
+    fb.textContent=`✅ Juist verbonden (+${Math.round(pts*100)}%)`;
+    fb.style.color="#7ee787";
+    zone.style.background="#234";
+  }else{
+    fb.textContent="❌ Niet juist verbonden. Probeer opnieuw.";
+    fb.style.color="#ff5555";
+  }
+  localStorage.setItem("scoreA",score);
+}
+
+window.onload=init;
+</script>
+</body>
+</html>
